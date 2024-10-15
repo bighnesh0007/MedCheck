@@ -38,10 +38,10 @@ interface Prediction {
 
 const models: Model[] = [
   { 
-    id: 'brain_tumor', 
-    name: 'Brain Tumor', 
+    id: 'bone_fracture', 
+    name: 'Bone Fracture', 
     endpoint: 'https://detect.roboflow.com/bone-fracture-7fylg/1',
-    description: 'Detects brain tumors in MRI scans'
+    description: 'Detects Bone Fractures in X-ray images'
   }
  
 ]

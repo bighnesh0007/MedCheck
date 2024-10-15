@@ -1,14 +1,15 @@
 'use client'
 
-import React from 'react'
-import { motion } from 'framer-motion'
-import { FaDna, FaStethoscope, FaMicroscope, FaUserMd,  FaAmbulance } from 'react-icons/fa'
+import React, { useState, useEffect } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { FaDna, FaStethoscope, FaMicroscope, FaUserMd, FaAmbulance } from 'react-icons/fa'
 import { MdHealthAndSafety, MdBiotech, MdSecurity } from 'react-icons/md'
-import { Brain, Activity, FileText, Heart, Zap, Shield } from 'lucide-react'
+import { Brain, Activity, FileText, Heart, Zap, Shield, ChevronDown } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 interface FeatureCardProps {
   title: string;
@@ -17,7 +18,7 @@ interface FeatureCardProps {
 }
 
 const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon: Icon }) => (
-  <Card className="w-full">
+  <Card className="w-full h-full">
     <CardHeader>
       <CardTitle className="flex items-center gap-2">
         <Icon className="w-6 h-6 text-primary" />
@@ -31,7 +32,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon: Ico
 )
 
 const TestimonialCard: React.FC<{ name: string; role: string; content: string }> = ({ name, role, content }) => (
-  <Card className="w-full">
+  <Card className="w-full h-full">
     <CardHeader>
       <CardTitle>{name}</CardTitle>
       <CardDescription>{role}</CardDescription>
@@ -42,7 +43,17 @@ const TestimonialCard: React.FC<{ name: string; role: string; content: string }>
   </Card>
 )
 
-export default function LandingPage() {
+export default function EnhancedLandingPage() {
+  const [isLoaded, setIsLoaded] = useState(false)
+  const { scrollYProgress } = useScroll()
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8])
+
+  useEffect(() => {
+    setIsLoaded(true)
+    console.log('Page loaded'+isLoaded)
+  }, [])
+
   const features = [
     { title: 'Medical Checkups', description: 'Comprehensive health assessments', icon: FaStethoscope },
     { title: 'AI Diagnostics', description: 'Cutting-edge AI-powered diagnostic tools', icon: Brain },
@@ -60,12 +71,21 @@ export default function LandingPage() {
     { name: 'Sarah Johnson', role: 'Wellness Coach', content: 'HealthTech\'s holistic approach to health management has been a game-changer for my clients. The integration of AI and personalized medicine is truly remarkable.' },
   ]
 
+  const faqs = [
+    { question: 'How does AI improve diagnostics?', answer: 'AI analyzes vast amounts of medical data to identify patterns and make predictions, often catching subtle signs that humans might miss.' },
+    { question: 'Is telemedicine as effective as in-person visits?', answer: 'For many conditions, telemedicine can be just as effective. It offers convenience without compromising on quality of care.' },
+    { question: 'What is personalized medicine?', answer: 'Personalized medicine tailors treatment plans based on an individual\'s genetic profile, lifestyle, and environment for optimal health outcomes.' },
+    { question: 'How secure is my health data?', answer: 'We employ state-of-the-art encryption and security protocols to ensure your health data remains confidential and protected.' },
+  ]
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/80">
-      
       <main>
         <section className="h-screen flex items-center justify-center relative overflow-hidden">
-          <div className="text-center z-10">
+          <motion.div
+            className="text-center z-10"
+            style={{ opacity, scale }}
+          >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -81,7 +101,7 @@ export default function LandingPage() {
                 Explore Our Services
               </Button>
             </motion.div>
-          </div>
+          </motion.div>
           <div className="absolute inset-0 z-0">
             <img
               src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2091&q=80"
@@ -89,6 +109,13 @@ export default function LandingPage() {
               className="w-full h-full object-cover opacity-20"
             />
           </div>
+          <motion.div
+            className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+          >
+            <ChevronDown className="w-8 h-8 text-primary" />
+          </motion.div>
         </section>
 
         <section className="py-20 px-6">
@@ -118,30 +145,30 @@ export default function LandingPage() {
               </div>
               <div>
                 <ul className="space-y-4">
-                  <li className="flex items-center gap-2">
+                  <motion.li className="flex items-center gap-2" whileHover={{ scale: 1.05 }}>
                     <Zap className="text-primary" />
                     <span>State-of-the-art medical technology</span>
-                  </li>
-                  <li className="flex items-center gap-2">
+                  </motion.li>
+                  <motion.li className="flex items-center gap-2" whileHover={{ scale: 1.05 }}>
                     <Heart className="text-primary" />
                     <span>Comprehensive health assessments</span>
-                  </li>
-                  <li className="flex items-center gap-2">
+                  </motion.li>
+                  <motion.li className="flex items-center gap-2" whileHover={{ scale: 1.05 }}>
                     <FaUserMd className="text-primary" />
                     <span>Expert medical professionals</span>
-                  </li>
-                  <li className="flex items-center gap-2">
+                  </motion.li>
+                  <motion.li className="flex items-center gap-2" whileHover={{ scale: 1.05 }}>
                     <Shield className="text-primary" />
                     <span>Personalized treatment plans</span>
-                  </li>
-                  <li className="flex items-center gap-2">
+                  </motion.li>
+                  <motion.li className="flex items-center gap-2" whileHover={{ scale: 1.05 }}>
                     <FileText className="text-primary" />
                     <span>Detailed health reports and analysis</span>
-                  </li>
-                  <li className="flex items-center gap-2">
+                  </motion.li>
+                  <motion.li className="flex items-center gap-2" whileHover={{ scale: 1.05 }}>
                     <MdSecurity className="text-primary" />
                     <span>Secure and confidential health data management</span>
-                  </li>
+                  </motion.li>
                 </ul>
               </div>
             </div>
@@ -204,9 +231,10 @@ export default function LandingPage() {
               {testimonials.map((testimonial, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 50 }}
+                  initial={{ opacity: 0,   y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
                 >
                   <TestimonialCard {...testimonial} />
                 </motion.div>
@@ -219,9 +247,14 @@ export default function LandingPage() {
           <div className="container mx-auto text-center">
             <h2 className="text-4xl font-bold mb-8 text-primary">Ready to Take Control of Your Health?</h2>
             <p className="text-xl mb-12 text-foreground/80">Join thousands of satisfied patients who have transformed their lives with our innovative healthcare solutions.</p>
-            <Button size="lg" className="animate-pulse">
-              Schedule Your Consultation
-            </Button>
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <Button size="lg" className="animate-pulse">
+                Schedule Your Consultation
+              </Button>
+            </motion.div>
           </div>
         </section>
 
@@ -234,7 +267,7 @@ export default function LandingPage() {
                   <CardTitle>State-of-the-Art Laboratories</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <img  src="https://images.unsplash.com/photo-1581093450021-4a7360e9a6b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Laboratory" className="w-full h-48 object-cover rounded-lg mb-4" />
+                  <img src="https://images.unsplash.com/photo-1581093450021-4a7360e9a6b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Laboratory" className="w-full h-48 object-cover rounded-lg mb-4" />
                   <p>Equipped with the latest technology for accurate and rapid diagnostics.</p>
                 </CardContent>
               </Card>
@@ -257,6 +290,20 @@ export default function LandingPage() {
                 </CardContent>
               </Card>
             </div>
+          </div>
+        </section>
+
+        <section className="py-20 px-6">
+          <div className="container mx-auto">
+            <h2 className="text-4xl font-bold mb-12 text-center text-primary">Frequently Asked Questions</h2>
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger>{faq.question}</AccordionTrigger>
+                  <AccordionContent>{faq.answer}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         </section>
       </main>
